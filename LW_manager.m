@@ -582,20 +582,20 @@ Manager_Init();
     end
 
     function update_handles()
-        st=get(handles.path_edit,'String');
-        if exist(st,'dir')~=7
+        st=get(handles.path_edit, 'String');
+        if exist(st, 'dir')~=7
             return;
         end
-        set(handles.path_edit,'userdata',st);
+        set(handles.path_edit, 'userdata', st);
         cd(st);
-        filename1=dir([st,filesep,'*.lw6']);
-        filename2=dir([st,filesep,'*.lw5']);
-        filename={filename1.name,filename2.name};
-        filelist=cell(1,length(filename));
-        filelist_suffix=cell(1,length(filename));
-        for k=1:length(filename)
-            filelist_suffix{k}=textscan(filename{k}(1:end-4),'%s');
-            filelist_suffix{k}=filelist_suffix{k}{1}';
+        filename1 = dir([st,filesep,'*.lw6']);
+        filename2 = dir([st,filesep,'*.lw5']);
+        filename = {filename1.name, filename2.name};
+        filelist = cell(1, length(filename));
+        filelist_suffix = cell(1, length(filename));
+        for k = 1:length(filename)
+            filelist_suffix{k} = textscan(filename{k}(1:end-4),'%s');
+            filelist_suffix{k} = filelist_suffix{k}{1}';
             switch(filename{k}(end))
                 case '6'
                     filelist{k}=filename{k}(1:end-4);

@@ -107,13 +107,13 @@ classdef FLW_segmentation<CLW_generic
         end
         
         function GUI_update(obj,batch_pre)
-            lwdataset=batch_pre.lwdataset;
-            str=get(obj.h_code_list,'String');
-            str_value=get(obj.h_code_list,'value');
-            str_selected=str(str_value);
-            st=sort(unique({lwdataset(1).header.events.code}));
-            for dataset_pos=2:length(lwdataset)
-                st= intersect(st,{lwdataset(dataset_pos).header.events.code});
+            lwdataset = batch_pre.lwdataset;
+            str = get(obj.h_code_list, 'String');
+            str_value = get(obj.h_code_list, 'value');
+            str_selected = str(str_value);
+            st = sort(unique({lwdataset(1).header.events.code}));
+            for dataset_pos = 2:length(lwdataset)
+                st = intersect(st, {lwdataset(dataset_pos).header.events.code});
             end
             if isempty(st)
                 error('***No common event code in the datasets.***')
@@ -133,7 +133,7 @@ classdef FLW_segmentation<CLW_generic
             if isempty(idx)&& ~isempty(st)
                 set(obj.h_code_list,'value',1);
             end
-            obj.virtual_filelist=batch_pre.virtual_filelist;
+            obj.virtual_filelist = batch_pre.virtual_filelist;
             set(obj.h_txt_cmt,'String',{obj.h_title_str,obj.h_help_str},'ForegroundColor','black');
         end   
     end
@@ -144,16 +144,16 @@ classdef FLW_segmentation<CLW_generic
             if isempty(events_in)
                 error(['***No events in dataset ',header_in.name,'***']);
             end
-            event_idx=[];
-            for event_labels_pos=1:length(option.event_labels)
-                event_idx=[event_idx,find(strcmp({events_in.code},...
+            event_idx = [];
+            for event_labels_pos = 1:length(option.event_labels)
+                event_idx = [event_idx, find(strcmp({events_in.code},...
                     option.event_labels{event_labels_pos}))];
             end
-            latency=[events_in(event_idx).latency];
-            event_idx=event_idx(latency+option.x_start>=header_in.xstart...
+            latency = [events_in(event_idx).latency];
+            event_idx = event_idx(latency+option.x_start>=header_in.xstart...
                 &latency+option.x_start+option.x_duration-header_in.xstep<=...
                 header_in.xstart+header_in.xstep*header_in.datasize(6));
-            event_idx=sort(event_idx);
+            event_idx = sort(event_idx);
             if isempty(event_idx)
                 lack_event = 1;
                 disp(['***event code ''',...

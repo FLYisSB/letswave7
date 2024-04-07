@@ -155,12 +155,10 @@ classdef FLW_segmentation<CLW_generic
                 header_in.xstart+header_in.xstep*header_in.datasize(6));
             event_idx=sort(event_idx);
             if isempty(event_idx)
-                lack_event = 1;
+                la
                 disp(['***event code ''',...
                     strjoin(option.event_labels,''', '''), ...
                     ''' can not found in dataset ',header_in.name,'***']);
-            else
-                lack_event = 0;
             end
             dxsize=fix((option.x_duration)/header_in.xstep);
             epoch_pos=0;
@@ -214,11 +212,7 @@ classdef FLW_segmentation<CLW_generic
             end
             option.function='FLW_segmentation';
             header_out.history(end+1).option=option; 
-            if lack_event == 1
-                header_out.lack_event = 1;
-            else
-                header_out.lack_event = 0;
-            end
+            header_out.lack_event = 0;
         end
         
         function lwdata_out= get_lwdata(lwdata_in,varargin)

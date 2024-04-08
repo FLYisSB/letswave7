@@ -49,7 +49,6 @@ classdef FLW_merge_by_tag<CLW_generic
             tag_string = get(obj.h_tag_list, 'String');
             tag_value = get(obj.h_tag_list, 'value');
             tag_selected = tag_string(tag_value);
-            disp(tag_selected);
 
             tag = textscan(lwdataset(1).header.name, '%s');
             tag = tag{:, 1};
@@ -70,9 +69,32 @@ classdef FLW_merge_by_tag<CLW_generic
     % Functional methods
     methods (Static = true)
         function header_out = get_header()
+
         end
 
-        function lwdataset_out = get_lwdataset(lwdataset_in)
+        function lwdataset_out = get_lwdataset(lwdataset_in, varargin)
+            disp('test!');
+            assignin('base', 'lwdataset_in', lwdataset_in);
+
+            option.tag = [];
+            option.is_save = 1;
+            option.suffix = 'merger';
+            option = CLW_check_input(option, {'tag', 'suffix', 'is_save'}, varargin);
+            assignin('base', 'option', option);
+            
+            lwdataset_out = {};
+            assignin('base', 'lwdataset_out', lwdataset_out);
+        
+            for i = 1:size(option.tag, 2)
+                tag_str = option.tag{i};
+                file_name_list = [];
+                for j = 1:size(lwdataset_in, 2)
+                    file_name = lwdataset_in(j).header.name;
+                    if contains(file_name, tag_str)
+                        file_name_list(j) = file_name;
+                    end
+                end
+            end
         end
     end
 end

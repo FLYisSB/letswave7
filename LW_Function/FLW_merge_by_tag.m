@@ -8,7 +8,9 @@ classdef FLW_merge_by_tag<CLW_generic
     % GUI methods
     methods
         function obj = FLW_merge_by_tag(batch_handle)
-            obj@CLW_generic(batch_handle,'merge','merge_epoch',...
+            obj@CLW_generic( ...
+                batch_handle, ...
+                'merge', 'Merge',...
                 'Merge multiple data files by tag into multi data file.');
             set(obj.h_is_save_chx, ...
                 'enable', 'off');
@@ -81,20 +83,34 @@ classdef FLW_merge_by_tag<CLW_generic
             option.suffix = 'merger';
             option = CLW_check_input(option, {'tag', 'suffix', 'is_save'}, varargin);
             assignin('base', 'option', option);
-            
-            lwdataset_out = {};
-            assignin('base', 'lwdataset_out', lwdataset_out);
         
+            lwdata_counts = 1;
             for i = 1:size(option.tag, 2)
                 tag_str = option.tag{i};
-                file_name_list = [];
+                file_name_list = {};
+                temp_counts = 1;
+
                 for j = 1:size(lwdataset_in, 2)
                     file_name = lwdataset_in(j).header.name;
                     if contains(file_name, tag_str)
-                        file_name_list(j) = file_name;
+                        file_name_list = [file_name_list, file_name];
+                        temp_lwdataset(temp_counts) = lwdataset_in(j);
+                        temp_counts = temp_counts + 1;
                     end
                 end
+                assignin('base', 'temp_lwdataset', temp_lwdataset);
+
+                new_suffix = [option.suffix, '_', char(tag_str)];
+                temp_option=struct( ...
+                    'type', 'epoch', ...
+                    'suffix', new_suffix, ...
+                    'is_save', 1);
+                merged_lwdata = FLW_merge.get_lwdata(temp_lwdataset, temp_option);
+                lwdataset_out(lwdata_counts) = merged_lwdata;
+                lwdata_counts = lwdata_counts + 1;
+                disp(file_name_list);
             end
+            assignin('base', 'lwdataset_out', lwdataset_out);
         end
     end
 end

@@ -82,7 +82,7 @@ classdef FLW_merge_by_tag<CLW_generic
             option.is_save = 1;
             option.suffix = 'merger';
             option = CLW_check_input(option, {'tag', 'suffix', 'is_save'}, varargin);
-            assignin('base', 'option', option);
+            % assignin('base', 'option', option);
         
             lwdata_counts = 1;
             for i = 1:size(option.tag, 2)
@@ -98,19 +98,19 @@ classdef FLW_merge_by_tag<CLW_generic
                         temp_counts = temp_counts + 1;
                     end
                 end
-                assignin('base', 'temp_lwdataset', temp_lwdataset);
+                % assignin('base', 'temp_lwdataset', temp_lwdataset);
 
                 new_suffix = [option.suffix, '_', char(tag_str)];
                 temp_option=struct( ...
                     'type', 'epoch', ...
-                    'suffix', new_suffix, ...
+                    'suffix', option.suffix, ...
                     'is_save', 1);
                 merged_lwdata = FLW_merge.get_lwdata(temp_lwdataset, temp_option);
                 lwdataset_out(lwdata_counts) = merged_lwdata;
                 lwdata_counts = lwdata_counts + 1;
-                disp(file_name_list);
+                % disp(file_name_list);
             end
-            assignin('base', 'lwdataset_out', lwdataset_out);
+            % assignin('base', 'lwdataset_out', lwdataset_out);
         end
     end
 end
